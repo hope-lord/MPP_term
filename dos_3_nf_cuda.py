@@ -14,26 +14,42 @@ def U(u1,u2,n1,n2):  # Potential term
     return u1*(delta(n1,1)+delta(n2,1))+u2*(delta(n1,2)+delta(n2,2)+delta(n1+n2,2))
 
 def gamma_m(om,k,M,u1,u2,eta = 1e-3):  # Gamma_m matrix
-    A = sp.lil_matrix((M-1,M-1),dtype=complex)
-    for i in range(M-1): A[i,i] = -(om+1j*eta-U(u1,u2,i+1,M-i-1))
-    for i in range(M-2): A[i,i+1] = -np.exp(-1j*k)
-    for i in range(M-2): A[i+1,i] = -np.exp(1j*k)
-    return A.tocsc()
+    A = []#sp.lil_matrix((M-1,M-1),dtype=complex)
+    row =[]
+    col =[]
+    for i in range(M-1): 
+        A.append(-(om+1j*eta-U(u1,u2,i+1,M-i-1)))
+        row.append(i)
+        col.append(i)
+    for i in range(M-2): 
+        A.append(-np.exp(-1j*k))
+        row.append(i)
+        col.append(i+1)
+    for i in range(M-2): 
+        A.append(-np.exp(1j*k))
+        row.append(i+1)
+        col.append(i)
+    return sp.csc_matrix((A,(row,col)),shape=(M-1,M-1),dtype=complex)
 
 def beta_m(M): # Beta_m matrix
-    A = sp.lil_matrix((M-1,M-1))
+    A = []#sp.lil_matrix((M-1,M-1))
+    row =[]
+    col =[]
     for i in range(M-2):
-        A[i,i] = 1
-        A[i,i+1] = 1
-
-    return A.tocsc()
+        A.append(1); A.append(1)
+        row.append(i); row.append(i)
+        col.append(i); col.append(i+1)
+    return sp.csc_matrix((A,(row,col)),shape=(M-1,M-1),dtype=complex)
 
 def alpha_m(M): # Alpha_m matrix
-    A = sp.lil_matrix((M-1,M-1))
+    A = []#sp.lil_matrix((M-1,M-1))
+    row =[]
+    col =[]
     for i in range(M-2):
-        A[i,i] = 1
-        A[i+1,i] = 1
-    return A.tocsc()
+        A.append(1); A.append(1)
+        row.append(i); row.append(i+1)
+        col.append(i); col.append(i)
+    return sp.csc_matrix((A,(row,col)),shape=(M-1,M-1),dtype=complex)
 
 
 def find_Am__help(om,k,Mc,u1,u2,eta=1e-3):  # Find A_3 matrix by iteration
