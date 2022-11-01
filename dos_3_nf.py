@@ -63,7 +63,7 @@ def DOS(om,k,Mc,u1,u2,eta=1e-3): # Calculate Density Of States at omega
     return -aa.imag/np.pi
 
 
-print(beta_m(4).todense())
+#print(beta_m(4).todense())
 
 
 
@@ -77,20 +77,21 @@ print(beta_m(4).todense())
 # print(aa.todense())
 
 
+if __name__ == '__main__':
 
-omega = np.linspace(-7.2,-6,100)#.tolist()+np.linspace(-6.95,-6,50).tolist()
-k = 0
-Mc = 51
+    omega = np.linspace(-7.2,0,200)#.tolist()+np.linspace(-6.95,-6,50).tolist()
+    k = 0
+    Mc = 51
 
-ll = []
-ar = np.ones_like(omega,dtype=int)
-with PPE() as exe:
-    ll = exe.map(DOS,omega,ar*k,ar*Mc,-ar*3,ar*0,ar*1e-2)
-ll = list(ll)
-plt.plot(omega,ll,'r-',label = f'$\eta={0.01},M_c={Mc}$')
-plt.xlabel("$\omega/t$")
-plt.ylabel("$A_3(\omega)$")
-plt.ylim(0,2)
-plt.xlim(-7.2,-6)
-plt.legend()
-plt.show()
+    ll = []
+    ar = np.ones_like(omega,dtype=int)
+    with PPE() as exe:
+        ll = exe.map(DOS,omega,ar*k,ar*Mc,-ar*3,ar*2.5,ar*1e-2)
+    ll = list(ll)
+    plt.plot(omega,ll,'r-',label = f'$\eta={0.01},M_c={Mc}, U_1=-3, U_2 = 2.5$')
+    plt.xlabel("$\omega/t$")
+    plt.ylabel("$A_3(\omega)$")
+    plt.ylim(0,5)
+    #plt.xlim(-7.2,-6)
+    plt.legend()
+    plt.show()

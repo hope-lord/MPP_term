@@ -49,6 +49,9 @@ def alpha_m(M): # Alpha_m matrix
         A.append(1); A.append(1)
         row.append(i); row.append(i+1)
         col.append(i); col.append(i)
+        A = np.array(A)
+        row = np.array(row)
+        col = np.array(col)
     return sp.csc_matrix((A,(row,col)),shape=(M-1,M-1),dtype=complex)
 
 
@@ -94,20 +97,21 @@ def DOS(om,k,Mc,u1,u2,eta=1e-3): # Calculate Density Of States at omega
 # print(aa.todense())
 
 
+if __name__ == '__main__':
 
-omega = np.linspace(-10,5,500)#.tolist()+np.linspace(-6.95,-6,50).tolist()
-k = 0
-Mc = 50
+    omega = np.linspace(-10,5,500)#.tolist()+np.linspace(-6.95,-6,50).tolist()
+    k = 0
+    Mc = 50
 
-ll = []
-ar = np.ones_like(omega,dtype=int)
-with PPE() as exe:
-    ll = exe.map(DOS,omega,ar*k,ar*Mc,-ar*4,ar*1,ar*1e-2)
-ll = list(ll)
-plt.plot(omega,ll,'r-',label = f'$\eta={0.01},M_c={Mc}$')
-plt.xlabel("$\omega/t$")
-plt.ylabel("$A_3(\omega)$")
-plt.ylim(0,2)
-# plt.xlim(-7.2,-6)
-plt.legend()
-plt.show()
+    ll = []
+    ar = np.ones_like(omega,dtype=int)
+    with PPE() as exe:
+        ll = exe.map(DOS,omega,ar*k,ar*Mc,-ar*4,ar*1,ar*1e-2)
+    ll = list(ll)
+    plt.plot(omega,ll,'r-',label = f'$\eta={0.01},M_c={Mc}$')
+    plt.xlabel("$\omega/t$")
+    plt.ylabel("$A_3(\omega)$")
+    plt.ylim(0,2)
+    # plt.xlim(-7.2,-6)
+    plt.legend()
+    plt.show()
