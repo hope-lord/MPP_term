@@ -32,7 +32,7 @@ def DOS(om,k,u1,u2,N,eta=1e-2):
 
 
 # print(U(1,2,2))
-if __name__ == '__main__':
+if __name__ == '__ain__':
     U1 = []
     U2 = 10**np.linspace(-1,2,50)
     eta = 1e-2
@@ -61,6 +61,50 @@ if __name__ == '__main__':
     plt.ylabel('$U_2 /t$')
     plt.xlim(0,4)
     plt.savefig("2-particle_phase_diagram.png")
+    
+    
+    
+    
+if __name__ == '__main__':
+    U1 = []
+    U2 = np.linspace(0,10,30)
+    eta = 1e-2
+    N = 1000
+    omega = np.linspace(-7,0,1000)
+    ar = np.ones_like(omega,dtype=int)
+
+
+    for u2 in U2: 
+
+        def func1(x):
+            dos = []
+            with PPE() as exe:
+                dos = exe.map(DOS,omega,ar*0,ar*x,ar*u2,ar*N,ar*eta)
+            dos = list(dos)
+            index = np.argmax(dos)
+            return omega[index]
+
+        func = lambda x : func1(x) + 4
+        U1.append(brentq(func,-1.8,-4,xtol=1e-2, maxiter=20))
+        
+    U1 = -np.array(U1)
+    plt.plot(U1,U2,'ro', markersize = 1.5)
+    plt.title('$N_f = 2$')
+    plt.xlabel('$-U_1 /t$')
+    plt.ylabel('$U_2 /t$')
+    plt.xlim(0,4)
+    plt.ylim(0,10)
+    plt.savefig("2-particle_phase_diagram_non_log.png")   
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     # plt.legend()
     # plt.show()
     
