@@ -87,7 +87,7 @@ for i in range(len(a)):
     subax.plot(y,dos(y,n,a[i]),color=colors[i],ls=ls[i])
 
 ax.set_xlabel("$\omega$")
-ax.set_ylabel(f"$iG({n},\omega)/\pi$")
+ax.set_ylabel(r"$-\frac{1}{\pi}"+f"Im[G({n},\omega)]$")
 ax.set_title(f"Density of States for n = {n}")
 ax.set_xlim(x[0],x[-1])
 subax.set_xlim(y[0],-y[0])
